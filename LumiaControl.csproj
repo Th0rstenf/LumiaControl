@@ -6,14 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="lumia-sdk" Version="0.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="lumia-sdk">
-      <HintPath>..\..\VisualStudio\LumiaSdk\lumia-sdk\bin\Debug\netcoreapp3.1\lumia-sdk.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

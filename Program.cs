@@ -17,34 +17,66 @@ namespace LumiaControl
         {
             LumiaSdk framework = new LumiaSdk();
             await framework.init(token, "", "ws://"+IP+":39231");
+			framework.error += (string r) =>
+			{
+				Console.WriteLine("error : " + r);
+			};
 
-            var r = await framework.GetInfo();
+			framework.closed += (string r) =>
+			{
+				Console.WriteLine("closed : " + r);
+			};
 
-            await checkCommands(framework);
-        }
+
+			framework.events += (JObject data) =>
+			{
+				Console.WriteLine("Event data : " + data.ToString());
+
+
+				// here we give the context as we know it's an SDK Eent types
+				switch (LumiaUtils.getTypeValueFromString<LumiaSdkEventTypes>("LumiaSdkEventTypes", data["type"].Value<string>()))
+				{
+					case LumiaSdkEventTypes.STATES:
+						Console.WriteLine("States have been updated:  " + data.ToString());
+						break;
+
+					case LumiaSdkEventTypes.COMMAND:
+						Console.WriteLine("A Chat Command is being triggered:  " + data.ToString());
+						break;
+
+					case LumiaSdkEventTypes.CHAT:
+						Console.WriteLine("New chat message:  " + data.ToString());
+						break;
+
+					case LumiaSdkEventTypes.ALERT:
+						Console.WriteLine("New alert:  " + data.ToString());
+						break;
+				}
+			};
+
+			var r = await framework.GetInfo();
+
+			Console.WriteLine("get info result : " + r.ToString());
+
+			await checkCommands(framework);
+		}
 
         public static async Task checkCommands(LumiaSdk framework)
         {
-            RGB color = new RGB();
-            color.r = 255;
-            color.g = 0;
-            color.b = 255;
+            RGB Red = new RGB
+            {
+                r = 255,
+                g = 0,
+                b = 255
+            };
 
-            
 
-            await framework.SendColor(color, 100, 10);
+            await framework.SendColor(Red, 100, 10);
         }
         static void Main(string[] args)
         {
-            
-               
-                
-            MainTask().GetAwaiter().GetResult();
 
-            
-
-            
-
+			MainTask().GetAwaiter().GetResult();
 
         }
     }
