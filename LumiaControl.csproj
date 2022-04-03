@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="lumia-sdk">
+      <HintPath>..\..\VisualStudio\LumiaSdk\lumia-sdk\bin\Debug\netcoreapp3.1\lumia-sdk.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
