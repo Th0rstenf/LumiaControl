@@ -16,7 +16,7 @@ namespace LumiaControl
         public static async Task MainTask()
         {
             LumiaSdk framework = new LumiaSdk();
-            await framework.init(token, "", "ws://"+IP+":39231");
+            await framework.init(token, "", IP);
 			framework.error += (string r) =>
 			{
 				Console.WriteLine("error : " + r);
@@ -27,33 +27,33 @@ namespace LumiaControl
 				Console.WriteLine("closed : " + r);
 			};
 
-
+			
 			framework.events += (JObject data) =>
 			{
 				Console.WriteLine("Event data : " + data.ToString());
 
 
 				// here we give the context as we know it's an SDK Eent types
-				switch (LumiaUtils.getTypeValueFromString<LumiaSdkEventTypes>("LumiaSdkEventTypes", data["type"].Value<string>()))
+				switch (LumiaUtils.getTypeValueFromString<LumiaEventTypes>("LumiaSdkEventTypes", data["type"].Value<string>()))
 				{
-					case LumiaSdkEventTypes.STATES:
+					case LumiaEventTypes.STATES:
 						Console.WriteLine("States have been updated:  " + data.ToString());
 						break;
 
-					case LumiaSdkEventTypes.COMMAND:
+					case LumiaEventTypes.COMMAND:
 						Console.WriteLine("A Chat Command is being triggered:  " + data.ToString());
 						break;
 
-					case LumiaSdkEventTypes.CHAT:
+					case LumiaEventTypes.CHAT:
 						Console.WriteLine("New chat message:  " + data.ToString());
 						break;
 
-					case LumiaSdkEventTypes.ALERT:
+					case LumiaEventTypes.ALERT:
 						Console.WriteLine("New alert:  " + data.ToString());
 						break;
 				}
 			};
-
+			
 			var r = await framework.GetInfo();
 
 			Console.WriteLine("get info result : " + r.ToString());
@@ -67,11 +67,11 @@ namespace LumiaControl
             {
                 r = 255,
                 g = 0,
-                b = 255
+                b = 0
             };
 
 
-            await framework.SendColor(Red, 100, 10);
+            await framework.SendColor(Red, 100, 1000,0,false,false, null);
         }
         static void Main(string[] args)
         {
