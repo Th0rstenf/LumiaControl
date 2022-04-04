@@ -17,51 +17,56 @@ namespace LumiaControl
         {
             LumiaSdk framework = new LumiaSdk();
             await framework.init(token, "", IP);
-			framework.error += (string r) =>
-			{
-				Console.WriteLine("error : " + r);
-			};
+            await debugOutput(framework);
 
-			framework.closed += (string r) =>
-			{
-				Console.WriteLine("closed : " + r);
-			};
+            await sendCommand(framework);
+        }
 
-			
-			framework.events += (JObject data) =>
-			{
-				Console.WriteLine("Event data : " + data.ToString());
+        private static async Task debugOutput(LumiaSdk framework)
+        {
+            framework.error += (string r) =>
+            {
+                Console.WriteLine("error : " + r);
+            };
+
+            framework.closed += (string r) =>
+            {
+                Console.WriteLine("closed : " + r);
+            };
 
 
-				// here we give the context as we know it's an SDK Eent types
-				switch (LumiaUtils.getTypeValueFromString<LumiaEventTypes>("LumiaSdkEventTypes", data["type"].Value<string>()))
-				{
-					case LumiaEventTypes.STATES:
-						Console.WriteLine("States have been updated:  " + data.ToString());
-						break;
+            framework.events += (JObject data) =>
+            {
+                Console.WriteLine("Event data : " + data.ToString());
 
-					case LumiaEventTypes.COMMAND:
-						Console.WriteLine("A Chat Command is being triggered:  " + data.ToString());
-						break;
 
-					case LumiaEventTypes.CHAT:
-						Console.WriteLine("New chat message:  " + data.ToString());
-						break;
+                // here we give the context as we know it's an SDK Eent types
+                switch (LumiaUtils.getTypeValueFromString<LumiaEventTypes>("LumiaSdkEventTypes", data["type"].Value<string>()))
+                {
+                    case LumiaEventTypes.STATES:
+                        Console.WriteLine("States have been updated:  " + data.ToString());
+                        break;
 
-					case LumiaEventTypes.ALERT:
-						Console.WriteLine("New alert:  " + data.ToString());
-						break;
-				}
-			};
-			
-			var r = await framework.GetInfo();
+                    case LumiaEventTypes.COMMAND:
+                        Console.WriteLine("A Chat Command is being triggered:  " + data.ToString());
+                        break;
 
-			Console.WriteLine("get info result : " + r.ToString());
+                    case LumiaEventTypes.CHAT:
+                        Console.WriteLine("New chat message:  " + data.ToString());
+                        break;
 
-			await checkCommands(framework);
-		}
+                    case LumiaEventTypes.ALERT:
+                        Console.WriteLine("New alert:  " + data.ToString());
+                        break;
+                }
+            };
 
-        public static async Task checkCommands(LumiaSdk framework)
+            var r = await framework.GetInfo();
+
+            Console.WriteLine("get info result : " + r.ToString());
+        }
+
+        public static async Task sendCommand(LumiaSdk framework,)
         {
             RGB Red = new RGB
             {

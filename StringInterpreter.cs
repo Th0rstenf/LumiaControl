@@ -10,26 +10,11 @@ namespace LumiaControl
     class StringInterpreter
     {
 
-        private static Dictionary<string, RGB> Colors;
-
-        public struct Command
-        {
-            public enum Type
-            {
-                TRANSITION
-                ,SCENE
-                ,INVALID
-            }
-            public Type type;
-            public RGB left;
-            public RGB right;
-            public string err;
-           
-        }
+        private static Dictionary<string, RGB> supportedColors;
         
         public StringInterpreter()
         {
-            Colors = new Dictionary<string, RGB>
+            supportedColors = new Dictionary<string, RGB>
             {
                 { "red", new RGB { r = 255, g = 0, b = 0 } },
                 { "blue", new RGB { r = 0, g = 0, b = 255 } },
@@ -44,11 +29,11 @@ namespace LumiaControl
             retVal.type = Command.Type.INVALID;
             string check = str.ToLower();
 
-            foreach (KeyValuePair<string,RGB> pair in Colors)
+            foreach (KeyValuePair<string,RGB> pair in supportedColors)
             {
                 if (check.IndexOf(pair.Key) == 0)
                 {
-                    retVal.left = pair.Value;
+                    retVal.listOfColorsLeft.Add(pair.Value);
                     check = check.Remove(0, pair.Key.Length);
                     if (check.IndexOf("to") == 0)
                     {
@@ -65,11 +50,11 @@ namespace LumiaControl
 
             if (retVal.type != Command.Type.INVALID)
             {
-                foreach (KeyValuePair<string, RGB> pair in Colors)
+                foreach (KeyValuePair<string, RGB> pair in supportedColors)
                 {
                     if (check.IndexOf(pair.Key) == 0)
                     {
-                        retVal.right = pair.Value;
+                        retVal.listOfColorsRight.Add(pair.Value);
                         check = check.Remove(0, pair.Key.Length);
                         break;
                     }
