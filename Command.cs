@@ -16,8 +16,10 @@ namespace LumiaControl
         }
         //TODO: make private, provide set/get
         public Type type;
+        //TODO: Also create a dictionary with group enum as key
         public List<RGB> listOfColorsLeft;
         public List<RGB> listOfColorsRight;
+     
         public string err;
 
         public Command(LumiaSdk theFramework)
@@ -33,9 +35,14 @@ namespace LumiaControl
             {
                 if( listOfColorsLeft.Count == listOfColorsRight.Count)
                 {
-                    if( listOfColorsLeft[0] == listOfColorsRight[0])
+                    if (listOfColorsLeft[0] == listOfColorsRight[0])
                     {
-                        await framework.SendColor(listOfColorsRight[0], 100, 5000, 0, false, false, null);
+                        await framework.SendColor(listOfColorsLeft[0], 100, 5000, 0, false, false, null);
+                    }
+                    else
+                    {
+                        await framework.SendColor(listOfColorsLeft[0], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        await framework.SendColor(listOfColorsRight[0], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
                     }
                 }
                 else

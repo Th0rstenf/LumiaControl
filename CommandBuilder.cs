@@ -9,14 +9,19 @@ namespace LumiaControl
     
     class CommandBuilder
     {
-
+        public enum group { LEFT,RIGHT};
         private static Dictionary<string, RGB> supportedColors;
         private LumiaSdk frameWork;
-        private List<ILumiaLight>;
-        
+        internal static  Dictionary<group,List<ILumiaLight>> listOfLights;
+
+
         public CommandBuilder(LumiaSdk theFrameWork)
         {
             frameWork = theFrameWork;
+            listOfLights = new Dictionary<group, List<ILumiaLight>>();
+            listOfLights[group.LEFT] = new List<ILumiaLight>();
+            listOfLights[group.RIGHT] = new List<ILumiaLight>();
+        
 
             supportedColors = new Dictionary<string, RGB>
             {
@@ -26,8 +31,11 @@ namespace LumiaControl
             };
         }
 
-
-        public Command InterpretString(string str)
+        public void addToLightGroup(ILumiaLight theLight, group theGroup)
+        {
+            listOfLights[theGroup].Add(theLight);
+        }
+        public Command analyze(string str)
         {
             Command retVal = new Command(frameWork);
             retVal.type = Command.Type.INVALID;

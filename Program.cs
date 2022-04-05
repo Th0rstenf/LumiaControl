@@ -12,18 +12,36 @@ namespace LumiaControl
     {
         private static string token = new string("lumia892089382");
         private static string IP = new string("192.168.1.43");
+        private static ILumiaLight left;
+        private static ILumiaLight right;
+
+
 
         public static async Task MainTask()
         {
             LumiaSdk framework = new LumiaSdk();
-            CommandBuilder interpreter = new CommandBuilder(framework);
+            CommandBuilder builder = new CommandBuilder(framework);
             await framework.init(token, "", IP);
+
+            left = new ILumiaLight();
+            left.type = LightBrands.TUYA;
+            left.id = "bf172f7cd299bace36qppv";
+            right = new ILumiaLight();
+            right.type = LightBrands.TUYA;
+            right.id = "bfe94a8ad680170181ejrq";
+
+            builder.addToLightGroup(right, CommandBuilder.group.RIGHT);
+            builder.addToLightGroup(left, CommandBuilder.group.LEFT);
+
+            
             await debugOutput(framework);
+
+
             while (true)
             {
                 Console.WriteLine("Enter string");
                 string str = System.Console.ReadLine();
-                Command cmd = interpreter.InterpretString(str);
+                Command cmd = builder.analyze(str);
                 await sendCommand(cmd);
             }
             
