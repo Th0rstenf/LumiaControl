@@ -29,26 +29,23 @@ namespace LumiaControl
             listOfColorsRight = new List<RGB>(); 
         }
 
-        public async void execute()
+        public async  void execute()
         {
             if (type != Type.INVALID)
             {
-                if( listOfColorsLeft.Count == listOfColorsRight.Count)
+                for (int i = 0; i < listOfColorsLeft.Count; ++i)
                 {
-                    if (listOfColorsLeft[0] == listOfColorsRight[0])
+                    if (listOfColorsLeft[i] == listOfColorsRight[i])
                     {
                         await framework.SendColor(listOfColorsLeft[0], 100, 5000, 0, false, false, null);
                     }
                     else
                     {
-                        await framework.SendColor(listOfColorsLeft[0], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
-                        await framework.SendColor(listOfColorsRight[0], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
+                        await framework.SendColor(listOfColorsLeft[i], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        await framework.SendColor(listOfColorsRight[i], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Light definitions should always be equal");
-                }
+                
             }
         }
 

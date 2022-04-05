@@ -13,6 +13,9 @@ namespace LumiaControl
         private static Dictionary<string, RGB> supportedColors;
         private LumiaSdk frameWork;
         internal static  Dictionary<group,List<ILumiaLight>> listOfLights;
+        internal static int defaultDuration = 5000;
+        internal static int defaultBrightness = 100;
+        internal static int transitionTime = 0;
 
 
         public CommandBuilder(LumiaSdk theFrameWork)
@@ -39,18 +42,19 @@ namespace LumiaControl
         {
             Command retVal = new Command(frameWork);
             retVal.type = Command.Type.INVALID;
-            string check = str.ToLower();
+            string[] scenes= str.ToLower().Split("to");
+            
             RGB color;
 
-            if (!check.Contains("to"))
+            for (uint i = 0U; i < scenes.Length; i++)
             {
-                color =  extractColor(ref check);
+                color =  extractColor(ref scenes[i]);
                 if (color != null)
                 {
                     retVal.listOfColorsLeft.Add(color);
-                    if (check.Length > 0)
+                    if (scenes[i].Length > 0)
                     {
-                        color = extractColor(ref check);
+                        color = extractColor(ref scenes[i]);
                     }
                     retVal.listOfColorsRight.Add(color);
                     retVal.type = Command.Type.SCENE;
