@@ -21,5 +21,7 @@ namespace LumiaControl
 
         public Command() { listOfColorsLeft = new List<RGB>(); listOfColorsRight = new List<RGB>(); }
 
+        public void execute() { }
+
     }
 }
