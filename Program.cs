@@ -16,7 +16,7 @@ namespace LumiaControl
         public static async Task MainTask()
         {
             LumiaSdk framework = new LumiaSdk();
-            StringInterpreter interpreter = new StringInterpreter();
+            CommandBuilder interpreter = new CommandBuilder(framework);
             await framework.init(token, "", IP);
             await debugOutput(framework);
             while (true)
@@ -24,7 +24,7 @@ namespace LumiaControl
                 Console.WriteLine("Enter string");
                 string str = System.Console.ReadLine();
                 Command cmd = interpreter.InterpretString(str);
-                await sendCommand(framework,cmd);
+                await sendCommand(cmd);
             }
             
         }
@@ -71,6 +71,11 @@ namespace LumiaControl
             var r = await framework.GetInfo();
 
             Console.WriteLine("get info result : " + r.ToString());
+        }
+
+        public static async Task sendCommand(Command cmd)
+        {
+            cmd.execute();
         }
 
         public static async Task sendCommand(LumiaSdk framework,Command cmd)
