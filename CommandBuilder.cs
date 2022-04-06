@@ -24,15 +24,15 @@ namespace LumiaControl
 
             supportedColors = new Dictionary<string, RGB>
             {
-                { "red", new RGB { r = 0xFF, g = 0, b = 0 } },
-                { "blue", new RGB { r = 0, g = 0, b = 0xFF } },
-                { "green", new RGB { r = 0, g = 255, b = 0 } },
-                { "yellow", new RGB{ r = 0xff, g  = 0xff, b = 0x00} },
-                { "orange", new RGB{ r = 0xff, g  = 0xa5, b = 0x00} },
-                { "teal", new RGB{ r = 0x00, g  = 0x80, b = 0x80} },
-                { "aqua", new RGB{ r = 0x1f, g  = 0xba, b = 0xed} },
-                { "pink", new RGB{ r = 0xfc, g  = 0x05, b = 0xbe} },
-                { "purple", new RGB{ r = 0xad, g  = 0x00, b = 0xff} }
+                { "red",    new RGB{r = 0xFF, g = 0x00, b = 0x00}},
+                { "blue",   new RGB{r = 0x00, g = 0x00, b = 0xff}},
+                { "green",  new RGB{r = 0x00, g = 0xff, b = 0x00}},
+                { "yellow", new RGB{r = 0xff, g = 0xff, b = 0x00}},
+                { "orange", new RGB{r = 0xff, g = 0xa5, b = 0x00}},
+                { "teal",   new RGB{r = 0x00, g = 0x80, b = 0x80}},
+                { "aqua",   new RGB{r = 0x1f, g = 0xba, b = 0xed}},
+                { "pink",   new RGB{r = 0xfc, g = 0x05, b = 0xbe}},
+                { "purple", new RGB{r = 0xad, g = 0x00, b = 0xff}}
 
             };
         }
