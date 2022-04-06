@@ -42,7 +42,7 @@ namespace LumiaControl
                 Console.WriteLine("Enter string");
                 string str = System.Console.ReadLine();
                 Command cmd = builder.analyze(str);
-                await sendCommand(cmd);
+                cmd.execute();
             }
             
         }
@@ -91,10 +91,6 @@ namespace LumiaControl
             Console.WriteLine("get info result : " + r.ToString());
         }
 
-        public static async Task sendCommand(Command cmd)
-        {
-            cmd.execute();
-        }
 
         public static async Task sendCommand(LumiaSdk framework,Command cmd)
         {
