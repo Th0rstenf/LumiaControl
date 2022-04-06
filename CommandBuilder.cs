@@ -6,7 +6,6 @@ using Lumia;
 namespace LumiaControl
 {
 
-    
     class CommandBuilder
     {
         public enum group { LEFT,RIGHT};
