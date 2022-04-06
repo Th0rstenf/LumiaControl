@@ -9,8 +9,8 @@ namespace LumiaControl
     partial class Command
     {
         private const int DefaultDuration = 5000;
-        private const int DefaultBrightness = 100;
-        private const int DefaultTransitionTime = 0;
+        private const int DefaultBrightness = 60;
+        private const int DefaultTransitionTime = 2500;
         private int transitionTime;
         private int duration;
         private int brightness;
@@ -41,7 +41,7 @@ namespace LumiaControl
         {
             if (type != Type.INVALID)
             {
-                for (int i = transitionTime; i < listOfColorsLeft.Count; ++i)
+                for (int i = 0; i < listOfColorsLeft.Count; ++i)
                 {
                     if (listOfColorsLeft[i] == listOfColorsRight[i])
                     {
