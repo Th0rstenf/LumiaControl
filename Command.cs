@@ -6,46 +6,53 @@ using Lumia;
 
 namespace LumiaControl
 {
-    class Command
+    partial class Command
     {
+        private const int DefaultDuration = 5000;
+        private const int DefaultBrightness = 100;
+        private const int DefaultTransitionTime = 0;
+        private int transitionTime;
+        private int duration;
+        private int brightness;
         private LumiaSdk framework;
-        public enum Type
-        {
-            TRANSITION
-            , SCENE
-            , INVALID
-        }
         //TODO: make private, provide set/get
         public Type type;
         //TODO: Also create a dictionary with group enum as key
-        public List<RGB> listOfColorsLeft;
-        public List<RGB> listOfColorsRight;
+        internal List<RGB> listOfColorsLeft;
+        internal List<RGB> listOfColorsRight;
+
+
+        
         
         public string err;
 
-        public Command(LumiaSdk theFramework)
+        public Command(LumiaSdk theFramework, int theDuration = DefaultDuration, int theBrightness = DefaultBrightness, int theTransitionTime = DefaultTransitionTime)
         {
             framework = theFramework;
             listOfColorsLeft = new List<RGB>();
-            listOfColorsRight = new List<RGB>(); 
+            listOfColorsRight = new List<RGB>();
+            duration = theDuration;
+            brightness = theBrightness;
+            transitionTime = theTransitionTime;
+            err = new String("");
         }
 
         public async  void execute()
         {
             if (type != Type.INVALID)
             {
-                for (int i = 0; i < listOfColorsLeft.Count; ++i)
+                for (int i = transitionTime; i < listOfColorsLeft.Count; ++i)
                 {
                     if (listOfColorsLeft[i] == listOfColorsRight[i])
                     {
-                         framework.SendColor(listOfColorsLeft[i], 100, CommandBuilder.defaultDuration, 0, false, false, null);
-                         await Task.Delay(CommandBuilder.defaultDuration);
+                         var ret = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, null);                         
                     }
                     else
                     {
-                         framework.SendColor(listOfColorsLeft[i], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
-                         framework.SendColor(listOfColorsRight[i], 100, 5000, 0, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
+                        var ret = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                            ret = framework.SendColor(listOfColorsRight[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
                     }
+                    await Task.Delay(duration);
                 }
                 
             }
