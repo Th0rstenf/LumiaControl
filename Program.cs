@@ -10,8 +10,8 @@ namespace LumiaControl
 {
     class Program
     {
-        private static string token = new string("lumia892089382");
-        private static string IP = new string("192.168.1.43");
+        private static readonly string token = new string("lumia892089382");
+        private static readonly string IP = new string("192.168.1.43");
         private static ILumiaLight left;
         private static ILumiaLight right;
 
@@ -23,12 +23,16 @@ namespace LumiaControl
             CommandBuilder builder = new CommandBuilder(framework);
             await framework.init(token, "", IP);
 
-            left = new ILumiaLight();
-            left.type = LightBrands.TUYA;
-            left.id = "bf172f7cd299bace36qppv";
-            right = new ILumiaLight();
-            right.type = LightBrands.TUYA;
-            right.id = "bfe94a8ad680170181ejrq";
+            left = new ILumiaLight
+            {
+                type = LightBrands.TUYA,
+                id = "bf172f7cd299bace36qppv"
+            };
+            right = new ILumiaLight
+            {
+                type = LightBrands.TUYA,
+                id = "bfe94a8ad680170181ejrq"
+            };
 
             builder.addToLightGroup(right, CommandBuilder.group.RIGHT);
             builder.addToLightGroup(left, CommandBuilder.group.LEFT);
@@ -92,18 +96,6 @@ namespace LumiaControl
         }
 
 
-        public static async Task sendCommand(LumiaSdk framework,Command cmd)
-        {
-            RGB Red = new RGB
-            {
-                r = 255,
-                g = 0,
-                b = 0
-            };
-
-
-            await framework.SendColor(Red, 100, 1000,0,false,false, null);
-        }
         static void Main(string[] args)
         {
 
