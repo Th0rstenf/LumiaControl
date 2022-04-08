@@ -15,8 +15,6 @@ namespace LumiaControl
         private static ILumiaLight left;
         private static ILumiaLight right;
 
-
-
         public static async Task MainTask()
         {
             LumiaSdk framework = new LumiaSdk();
@@ -46,7 +44,17 @@ namespace LumiaControl
                 Console.WriteLine("Enter string");
                 string str = System.Console.ReadLine();
                 Command cmd = builder.analyze(str);
-                cmd.execute();
+                if (cmd.isValid())
+                {
+                    cmd.execute();
+                }
+                CommandBuilder.LogData log = builder.getLatestLog();
+                if (log.type == CommandBuilder.LogData.Type.ERROR)
+                {
+                    Console.WriteLine(log.msg);
+                }
+
+
             }
             
         }
@@ -96,7 +104,7 @@ namespace LumiaControl
         }
 
 
-        static void Main(string[] args)
+        static void Main()
         {
 
 			MainTask().GetAwaiter().GetResult();

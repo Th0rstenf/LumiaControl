@@ -13,8 +13,21 @@ namespace LumiaControl
         private LumiaSdk frameWork;
         internal static  Dictionary<group,List<ILumiaLight>> listOfLights;
 
+        public struct LogData
+        {
+            internal string msg;
+            internal enum Type 
+            {
+                LOG,
+                ERROR
+            }
+            internal Type type;
+        }
+        private LogData latestLog;
+
         public CommandBuilder(LumiaSdk theFrameWork)
         {
+            latestLog = new LogData();
             frameWork = theFrameWork;
             listOfLights = new Dictionary<group, List<ILumiaLight>>();
             listOfLights[group.LEFT] = new List<ILumiaLight>();
@@ -42,8 +55,10 @@ namespace LumiaControl
         }
         public Command analyze(string str)
         {
-            Command retVal = new Command(frameWork);
-            retVal.type = Command.Type.INVALID;
+            Command retVal = new Command(frameWork)
+            {
+                type = Command.Type.INVALID
+            };
             string[] scenes = splitAndClean(str);
 
             RGB color;
@@ -61,6 +76,11 @@ namespace LumiaControl
                     }
                     retVal.listOfColorsRight.Add(color);
                     retVal.type = Command.Type.SCENE;
+                }
+                else
+                {
+                    latestLog.msg = "Error: " + scenes[i] + " is not a color";
+                    latestLog.type = LogData.Type.ERROR;
                 }
             }
 
@@ -94,6 +114,11 @@ namespace LumiaControl
             }
 
             return colorFound;
+        }
+
+        public LogData getLatestLog()
+        {
+            return latestLog;
         }
     }
 }

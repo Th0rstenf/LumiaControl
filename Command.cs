@@ -22,8 +22,8 @@ namespace LumiaControl
         internal List<RGB> listOfColorsRight;
 
 
-        
-        
+
+
         public string err;
 
         public Command(LumiaSdk theFramework, int theDuration = DefaultDuration, int theBrightness = DefaultBrightness, int theTransitionTime = DefaultTransitionTime)
@@ -37,7 +37,7 @@ namespace LumiaControl
             err = new String("");
         }
 
-        public async  void execute()
+        public async void execute()
         {
             if (type != Type.INVALID)
             {
@@ -45,7 +45,7 @@ namespace LumiaControl
                 {
                     if (listOfColorsLeft[i] == listOfColorsRight[i])
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, null);                         
+                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, null);
                     }
                     else
                     {
@@ -54,9 +54,13 @@ namespace LumiaControl
                     }
                     await Task.Delay(duration);
                 }
-                
+
             }
         }
 
+        public bool isValid() 
+        {
+            return type != Type.INVALID;
+        }
     }
 }
