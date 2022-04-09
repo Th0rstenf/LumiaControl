@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Lumia;
 
@@ -99,18 +100,57 @@ namespace LumiaControl
             return arr;
         }
 
-        private static RGB extractColor(ref string str)
+        private  RGB extractColor(ref string str)
         {
             RGB colorFound = null;
+
             foreach (KeyValuePair<string, RGB> pair in supportedColors)
             {
-                
+
                 if (str.IndexOf(pair.Key) == 0)
                 {
                     colorFound = pair.Value;
                     str = str.Remove(0, pair.Key.Length);
                     break;
                 }
+                else if (str.IndexOf("hex") == 0)
+                {
+                    str = str.Remove(0, 3);
+                    colorFound = extractColorFromHex(ref str);
+                }
+                else if(str.IndexOf("0x") == 0)
+                {
+                    str = str.Remove(0, 2);
+                    colorFound = extractColorFromHex(ref str);
+                }
+            }
+
+            return colorFound;
+        }
+
+        private RGB extractColorFromHex(ref string str)
+        {
+            RGB colorFound;
+            if (str.Length < 6)
+            {
+                latestLog.msg = "Hex number needs to have six digits";
+                latestLog.type = LogData.Type.ERROR;
+            }
+            colorFound = new RGB();
+            string red = str.Substring(0, 2);
+            string green = str.Substring(2, 2);
+            string blue = str.Substring(4, 2);
+            if (!Int32.TryParse(red, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out colorFound.r)
+            || !Int32.TryParse(green, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out colorFound.g)
+            || !Int32.TryParse(blue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out colorFound.b)
+            )
+            {
+                latestLog.msg = "Error: " + str.Substring(0, 5) + " is not a legal hex value";
+                latestLog.type = LogData.Type.ERROR;
+            }
+            else
+            {
+                str = str.Remove(0, 6);
             }
 
             return colorFound;
