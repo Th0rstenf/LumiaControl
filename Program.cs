@@ -35,9 +35,7 @@ namespace LumiaControl
             builder.addToLightGroup(right, CommandBuilder.group.RIGHT);
             builder.addToLightGroup(left, CommandBuilder.group.LEFT);
 
-            
             await debugOutput(framework);
-
 
             while (true)
             {
@@ -53,10 +51,7 @@ namespace LumiaControl
                 {
                     Console.WriteLine(log.msg);
                 }
-
-
-            }
-            
+            }         
         }
 
         private static async Task debugOutput(LumiaSdk framework)
@@ -70,7 +65,6 @@ namespace LumiaControl
             {
                 Console.WriteLine("closed : " + r);
             };
-
 
             framework.events += (JObject data) =>
             {
@@ -97,18 +91,13 @@ namespace LumiaControl
                         break;
                 }
             };
-
             var r = await framework.GetInfo();
-
             Console.WriteLine("get info result : " + r.ToString());
         }
 
-
         static void Main()
         {
-
 			MainTask().GetAwaiter().GetResult();
-
         }
     }
 }

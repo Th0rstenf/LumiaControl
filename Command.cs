@@ -14,15 +14,13 @@ namespace LumiaControl
         private int transitionTime;
         private int duration;
         private int brightness;
+        private bool isNewDefault = false;
         private LumiaSdk framework;
         //TODO: make private, provide set/get
         public Type type;
         //TODO: Also create a dictionary with group enum as key
         internal List<RGB> listOfColorsLeft;
         internal List<RGB> listOfColorsRight;
-
-
-
 
         public string err;
 
@@ -45,12 +43,12 @@ namespace LumiaControl
                 {
                     if (listOfColorsLeft[i] == listOfColorsRight[i])
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, null);
+                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, isNewDefault, false, null);
                     }
                     else
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
-                        _ = framework.SendColor(listOfColorsRight[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
+                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        _ = framework.SendColor(listOfColorsRight[i], brightness, duration, transitionTime, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
                     }
                     await Task.Delay(duration);
                 }

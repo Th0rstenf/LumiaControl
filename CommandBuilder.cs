@@ -46,7 +46,6 @@ namespace LumiaControl
                 { "aqua",   new RGB{r = 0x1f, g = 0xba, b = 0xed}},
                 { "pink",   new RGB{r = 0xfc, g = 0x05, b = 0xbe}},
                 { "purple", new RGB{r = 0xad, g = 0x00, b = 0xff}}
-
             };
         }
 
@@ -103,10 +102,8 @@ namespace LumiaControl
         private  RGB extractColor(ref string str)
         {
             RGB colorFound = null;
-
             foreach (KeyValuePair<string, RGB> pair in supportedColors)
             {
-
                 if (str.IndexOf(pair.Key) == 0)
                 {
                     colorFound = pair.Value;
@@ -124,7 +121,6 @@ namespace LumiaControl
                     colorFound = extractColorFromHex(ref str);
                 }
             }
-
             return colorFound;
         }
 
@@ -152,7 +148,6 @@ namespace LumiaControl
             {
                 str = str.Remove(0, 6);
             }
-
             return colorFound;
         }
 
