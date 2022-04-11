@@ -9,6 +9,20 @@ namespace LumiaControl
 
     class CommandBuilder
     {
+
+        private const int DefaultDuration = 5000;
+        private const int FlashDuration = 500;
+        private const int DefaultBrightness = 50;
+        private const int DimmedBrightness = 10;
+        private const int DefaultTransitionTime = 500;
+        private const int BrutalBrightness = 100;
+
+        private const string FlashCommand = "flash";
+        private const string SmoothCommand = "smooth";
+        private const string DimmedCommand = "dimmed";
+        private const string BrightCommand = "bright";
+        
+
         public enum group { LEFT,RIGHT};
         private static Dictionary<string, RGB> supportedColors;
         private LumiaSdk frameWork;
@@ -34,7 +48,6 @@ namespace LumiaControl
             listOfLights[group.LEFT] = new List<ILumiaLight>();
             listOfLights[group.RIGHT] = new List<ILumiaLight>();
         
-
             supportedColors = new Dictionary<string, RGB>
             {
                 { "red",    new RGB{r = 0xFF, g = 0x00, b = 0x00}},
@@ -55,7 +68,14 @@ namespace LumiaControl
         }
         public Command analyze(string str)
         {
-            Command retVal = new Command(frameWork)
+
+            int duration = DefaultDuration;
+            int brightness = DefaultBrightness;
+            int transitionTime = DefaultTransitionTime;
+
+            applyModifiers(ref str, ref duration, ref transitionTime,ref brightness);
+
+            Command retVal = new Command(frameWork, theDuration: duration, theBrightness: brightness, theTransitionTime: transitionTime)
             {
                 type = Command.Type.INVALID
             };
@@ -87,6 +107,42 @@ namespace LumiaControl
 
 
             return retVal;
+        }
+
+        private void applyModifiers(ref string str, ref int duration, ref int transitionTime, ref int brightness)
+        {
+            if (extractModifier(ref str, FlashCommand))
+            {
+                duration = FlashDuration;
+            }
+            if (extractModifier(ref str, SmoothCommand))
+            {
+                transitionTime = duration;
+            }
+            if (extractModifier(ref str, DimmedCommand))
+            {
+                brightness = DimmedBrightness;
+                if (str.Contains(BrightCommand))
+                {
+                    latestLog.msg = "You should decide for either bright or dimmed. Let's go with dimmed for now.";
+                    latestLog.type = LogData.Type.LOG;
+                }
+            }
+            else if(extractModifier(ref str, BrightCommand))
+            {
+                brightness = BrutalBrightness;
+            }
+
+        }
+
+        private static bool extractModifier(ref string str, string modifier)
+        {   
+            bool found = str.ToLower().Contains(modifier);
+            if (found)
+            {
+                str = str.Remove(str.IndexOf(modifier), modifier.Length);
+            }
+            return found;
         }
 
         private static string[] splitAndClean(string str)

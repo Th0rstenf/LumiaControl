@@ -8,9 +8,6 @@ namespace LumiaControl
 {
     partial class Command
     {
-        private const int DefaultDuration = 5000;
-        private const int DefaultBrightness = 60;
-        private const int DefaultTransitionTime = 0;
         private int transitionTime;
         private int duration;
         private int brightness;
@@ -24,7 +21,7 @@ namespace LumiaControl
 
         public string err;
 
-        public Command(LumiaSdk theFramework, int theDuration = DefaultDuration, int theBrightness = DefaultBrightness, int theTransitionTime = DefaultTransitionTime)
+        public Command(LumiaSdk theFramework, int theDuration, int theBrightness, int theTransitionTime)
         {
             framework = theFramework;
             listOfColorsLeft = new List<RGB>();

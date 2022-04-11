@@ -70,7 +70,6 @@ namespace LumiaControl
             {
                 Console.WriteLine("Event data : " + data.ToString());
 
-
                 // here we give the context as we know it's an SDK Eent types
                 switch (LumiaUtils.getTypeValueFromString<LumiaEventTypes>("LumiaSdkEventTypes", data["type"].Value<string>()))
                 {
