@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LumiaControl", "LumiaControl.csproj", "{B900BD59-F39C-4C84-A47E-F2079FAE3F20}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LumiaControlTest", "..\LumiaControlTest\LumiaControlTest.csproj", "{2BE41C02-BDE3-4D15-A248-2C41DF458FF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LumiaControl", "LumiaControl.csproj", "{B900BD59-F39C-4C84-A47E-F2079FAE3F20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{B900BD59-F39C-4C84-A47E-F2079FAE3F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B900BD59-F39C-4C84-A47E-F2079FAE3F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B900BD59-F39C-4C84-A47E-F2079FAE3F20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BE41C02-BDE3-4D15-A248-2C41DF458FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BE41C02-BDE3-4D15-A248-2C41DF458FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BE41C02-BDE3-4D15-A248-2C41DF458FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BE41C02-BDE3-4D15-A248-2C41DF458FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

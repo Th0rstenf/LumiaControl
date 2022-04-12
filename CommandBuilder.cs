@@ -8,13 +8,9 @@ namespace LumiaControl
 {
 
     class CommandBuilder
-    {
-
-        private const int DefaultDuration = 5000;
+    {       
         private const int FlashDuration = 500;
-        private const int DefaultBrightness = 50;
         private const int DimmedBrightness = 10;
-        private const int DefaultTransitionTime = 500;
         private const int BrutalBrightness = 100;
 
         private const string FlashCommand = "flash";
@@ -22,7 +18,6 @@ namespace LumiaControl
         private const string DimmedCommand = "dimmed";
         private const string BrightCommand = "bright";
         
-
         public enum group { LEFT,RIGHT};
         private static Dictionary<string, RGB> supportedColors;
         private LumiaSdk frameWork;
@@ -69,37 +64,34 @@ namespace LumiaControl
         public Command analyze(string str)
         {
 
-            int duration = DefaultDuration;
-            int brightness = DefaultBrightness;
-            int transitionTime = DefaultTransitionTime;
-
-            applyModifiers(ref str, ref duration, ref transitionTime,ref brightness);
-
-            Command retVal = new Command(frameWork, theDuration: duration, theBrightness: brightness, theTransitionTime: transitionTime)
+          
+            Command retVal = new Command(frameWork)
             {
                 type = Command.Type.INVALID
             };
-            string[] scenes = splitAndClean(str);
+            string[] sceneDescriptorString = splitAndClean(str);
+            Scene[] scenes = new Scene[sceneDescriptorString.Length];
 
             RGB color;
 
-            for (uint i = 0U; i < scenes.Length; i++)
+            for (uint i = 0U; i < sceneDescriptorString.Length; i++)
             {
-                scenes[i] = scenes[i].Trim();
-                color = extractColor(ref scenes[i]);
+                sceneDescriptorString[i] = sceneDescriptorString[i].Trim();
+                applyModifiers(ref sceneDescriptorString[i], ref scenes[i].duration, ref scenes[i].transition, ref scenes[i].brightness);
+                color = extractColor(ref sceneDescriptorString[i]);
                 if (color != null)
                 {
-                    retVal.listOfColorsLeft.Add(color);
-                    if (scenes[i].Length > 0)
+                    scenes[i].colorLeft = color;
+                    if (sceneDescriptorString[i].Length > 0)
                     {
-                        color = extractColor(ref scenes[i]);
+                        color = extractColor(ref sceneDescriptorString[i]);
                     }
-                    retVal.listOfColorsRight.Add(color);
+                    scenes[i].colorRight = color;
                     retVal.type = Command.Type.SCENE;
                 }
                 else
                 {
-                    latestLog.msg = "Error: " + scenes[i] + " is not a color";
+                    latestLog.msg = "Error: " + sceneDescriptorString[i] + " is not a color";
                     latestLog.type = LogData.Type.ERROR;
                 }
             }

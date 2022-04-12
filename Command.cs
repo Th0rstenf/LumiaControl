@@ -8,54 +8,52 @@ namespace LumiaControl
 {
     partial class Command
     {
-        private int transitionTime;
-        private int duration;
-        private int brightness;
+
         private bool isNewDefault = false;
         private LumiaSdk framework;
         //TODO: make private, provide set/get
         public Type type;
-        //TODO: Also create a dictionary with group enum as key
-        internal List<RGB> listOfColorsLeft;
-        internal List<RGB> listOfColorsRight;
+        internal List<Scene> listOfScenes;        
+
 
         public string err;
 
-        public Command(LumiaSdk theFramework, int theDuration, int theBrightness, int theTransitionTime)
+        public Command(LumiaSdk theFramework)
         {
             framework = theFramework;
-            listOfColorsLeft = new List<RGB>();
-            listOfColorsRight = new List<RGB>();
-            duration = theDuration;
-            brightness = theBrightness;
-            transitionTime = theTransitionTime;
+            listOfScenes = new List<Scene>();
             err = new String("");
         }
 
         public async void execute()
         {
             if (type != Type.INVALID)
-            {
-                for (int i = 0; i < listOfColorsLeft.Count; ++i)
+            {                
+                foreach(Scene scene in listOfScenes)
                 {
-                    if (listOfColorsLeft[i] == listOfColorsRight[i])
+                    if(scene.colorLeft == scene.colorRight)
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, isNewDefault, false, null);
+                        _ = framework.SendColor(scene.colorLeft, scene.brightness, scene.duration, scene.transition, isNewDefault, false, null);
                     }
                     else
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
-                        _ = framework.SendColor(listOfColorsRight[i], brightness, duration, transitionTime, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
-                    }
-                    await Task.Delay(duration);
-                }
+                        _ = framework.SendColor(scene.colorLeft, scene.brightness, scene.duration, scene.transition, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        _ = framework.SendColor(scene.colorRight, scene.brightness, scene.duration, scene.transition, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
 
+                    }
+                    await Task.Delay(scene.duration);
+                }                
             }
         }
 
         public bool isValid() 
         {
             return type != Type.INVALID;
+        }
+
+        public void addScene(Scene scene)
+        {
+            listOfScenes.Add(scene);
         }
     }
 }
