@@ -7,9 +7,9 @@ namespace LumiaControl
 {
     class Scene
     {
-        private const int DefaultDuration = 5000;
-        private const int DefaultBrightness = 50;
-        private const int DefaultTransitionTime = 500;
+        internal const int DefaultDuration = 5000;
+        internal const int DefaultBrightness = 50;
+        internal const int DefaultTransitionTime = 500;
 
         internal RGB colorLeft;
         internal RGB colorRight;

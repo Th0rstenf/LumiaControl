@@ -63,12 +63,17 @@ namespace LumiaControl
         }
         public Command analyze(string str)
         {
-
-          
+     
             Command retVal = new Command(frameWork)
             {
                 type = Command.Type.INVALID
             };
+            int duration    = Scene.DefaultDuration;
+            int transition  = Scene.DefaultTransitionTime;
+            int brightness = Scene.DefaultBrightness;
+
+            applyModifiers(ref str, ref duration, ref transition, ref brightness);
+            
             string[] sceneDescriptorString = splitAndClean(str);
             Scene[] scenes = new Scene[sceneDescriptorString.Length];
 
@@ -76,8 +81,11 @@ namespace LumiaControl
 
             for (uint i = 0U; i < sceneDescriptorString.Length; i++)
             {
+                scenes[i].duration   = duration;
+                scenes[i].transition = transition;
+                scenes[i].brightness = brightness;
+
                 sceneDescriptorString[i] = sceneDescriptorString[i].Trim();
-                applyModifiers(ref sceneDescriptorString[i], ref scenes[i].duration, ref scenes[i].transition, ref scenes[i].brightness);
                 color = extractColor(ref sceneDescriptorString[i]);
                 if (color != null)
                 {
@@ -95,8 +103,6 @@ namespace LumiaControl
                     latestLog.type = LogData.Type.ERROR;
                 }
             }
-
-
 
             return retVal;
         }
