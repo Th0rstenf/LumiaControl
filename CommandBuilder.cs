@@ -76,6 +76,10 @@ namespace LumiaControl
             
             string[] sceneDescriptorString = splitAndClean(str);
             Scene[] scenes = new Scene[sceneDescriptorString.Length];
+            for (int i = 0; i < scenes.Length; ++i)
+            {
+                scenes[i] = new Scene();
+            }
 
             RGB color;
 
@@ -102,6 +106,7 @@ namespace LumiaControl
                     latestLog.msg = "Error: " + sceneDescriptorString[i] + " is not a color";
                     latestLog.type = LogData.Type.ERROR;
                 }
+                retVal.addScene(scenes[i]);
             }
 
             return retVal;
