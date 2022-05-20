@@ -103,6 +103,7 @@ namespace LumiaControl
         private  RGB extractColor(ref string str)
         {
             RGB colorFound = null;
+            str = str.Trim();
 
             foreach (KeyValuePair<string, RGB> pair in supportedColors)
             {

@@ -8,7 +8,7 @@ namespace LumiaControl
 {
     partial class Command
     {
-        private const int DefaultDuration = 5000;
+        private const int DefaultDuration = 10000;
         private const int DefaultBrightness = 60;
         private const int DefaultTransitionTime = 0;
         private int transitionTime;
@@ -49,7 +49,7 @@ namespace LumiaControl
                     }
                     else
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        _ = framework.SendColor(listOfColorsLeft[i], brightness, 5, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
                         _ = framework.SendColor(listOfColorsRight[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
                     }
                     await Task.Delay(duration);
