@@ -8,7 +8,7 @@ namespace LumiaControl
 {
     partial class Command
     {
-        private const int DefaultDuration = 5000;
+        private const int DefaultDuration = 10000;
         private const int DefaultBrightness = 60;
         private const int DefaultTransitionTime = 0;
         private int transitionTime;
@@ -22,8 +22,8 @@ namespace LumiaControl
         internal List<RGB> listOfColorsRight;
 
 
-        
-        
+
+
         public string err;
 
         public Command(LumiaSdk theFramework, int theDuration = DefaultDuration, int theBrightness = DefaultBrightness, int theTransitionTime = DefaultTransitionTime)
@@ -37,7 +37,7 @@ namespace LumiaControl
             err = new String("");
         }
 
-        public async  void execute()
+        public async void execute()
         {
             if (type != Type.INVALID)
             {
@@ -45,18 +45,22 @@ namespace LumiaControl
                 {
                     if (listOfColorsLeft[i] == listOfColorsRight[i])
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, null);                         
+                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, null);
                     }
                     else
                     {
-                        _ = framework.SendColor(listOfColorsLeft[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        _ = framework.SendColor(listOfColorsLeft[i], brightness, 5, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
                         _ = framework.SendColor(listOfColorsRight[i], brightness, duration, transitionTime, false, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
                     }
                     await Task.Delay(duration);
                 }
-                
+
             }
         }
 
+        public bool isValid() 
+        {
+            return type != Type.INVALID;
+        }
     }
 }
