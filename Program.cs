@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Lumia;
-
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
 
 namespace LumiaControl
 {
@@ -15,8 +17,12 @@ namespace LumiaControl
         private static ILumiaLight left;
         private static ILumiaLight right;
 
+
+       
+
         public static async Task MainTask()
         {
+
             LumiaSdk framework = new LumiaSdk();
             CommandBuilder builder = new CommandBuilder(framework);
             await framework.init(token, "", IP);
@@ -24,12 +30,12 @@ namespace LumiaControl
             left = new ILumiaLight
             {
                 type = LightBrands.TUYA,
-                id = "bf172f7cd299bace36qppv"
+                id = "bfe94a8ad680170181ejrq"
             };
             right = new ILumiaLight
             {
                 type = LightBrands.TUYA,
-                id = "bfe94a8ad680170181ejrq"
+                id = "bf172f7cd299bace36qppv"
             };
 
             builder.addToLightGroup(right, CommandBuilder.group.RIGHT);
@@ -37,6 +43,8 @@ namespace LumiaControl
 
             await debugOutput(framework);
 
+            await startServer(framework, builder, 1337).ConfigureAwait(false);
+            /*
             while (true)
             {
                 Console.WriteLine("Enter string");
@@ -51,7 +59,46 @@ namespace LumiaControl
                 {
                     Console.WriteLine(log.msg);
                 }
-            }         
+            }
+            */
+        }
+
+        public static async Task startServer(LumiaSdk frameWork, CommandBuilder builder, int port)
+        {
+            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPHostEntry iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress iPAddress = iPHostEntry.AddressList[1];
+            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, port);
+            listener.Bind(localEndPoint);
+            listener.Listen(1);
+            
+            while(true)
+            {
+                Console.WriteLine("Waiting for connections on {0}", listener.LocalEndPoint.ToString());
+                Socket handle = listener.Accept();
+                Console.WriteLine("Accepted connection from :" + handle.RemoteEndPoint.ToString());
+                string data = null;
+                var bytes = new byte[1024];
+
+                int bytesReceived = handle.Receive(bytes);
+                data += Encoding.ASCII.GetString(bytes, 0, bytesReceived);
+
+                
+                Console.WriteLine("Received: {0}", data);
+
+                Command cmd = builder.analyze(data);
+                if (cmd.isValid())
+                {
+                    cmd.execute();
+                }
+                CommandBuilder.LogData log = builder.getLatestLog();
+                if (log.msg != null)
+                {
+                    handle.Send(Encoding.ASCII.GetBytes(log.msg));
+                }
+                handle.Shutdown(SocketShutdown.Both);
+                handle.Close();         
+            }
         }
 
         private static async Task debugOutput(LumiaSdk framework)

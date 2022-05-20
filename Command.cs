@@ -8,7 +8,12 @@ namespace LumiaControl
 {
     partial class Command
     {
-
+        private const int DefaultDuration = 10000;
+        private const int DefaultBrightness = 60;
+        private const int DefaultTransitionTime = 0;
+        private int transitionTime;
+        private int duration;
+        private int brightness;
         private bool isNewDefault = false;
         private LumiaSdk framework;
         //TODO: make private, provide set/get
