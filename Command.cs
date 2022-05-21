@@ -6,7 +6,7 @@ using Lumia;
 
 namespace LumiaControl
 {
-    partial class Command
+    public partial class Command
     {
         private const int DefaultDuration = 10000;
         private const int DefaultBrightness = 60;

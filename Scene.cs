@@ -5,7 +5,7 @@ using Lumia;
 
 namespace LumiaControl
 {
-    class Scene
+    public class Scene
     {
         internal const int DefaultDuration = 5000;
         internal const int DefaultBrightness = 50;

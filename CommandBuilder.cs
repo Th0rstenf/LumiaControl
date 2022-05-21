@@ -7,7 +7,7 @@ using Lumia;
 namespace LumiaControl
 {
 
-    class CommandBuilder
+    public class CommandBuilder
     {       
         private const int FlashDuration = 500;
         private const int DimmedBrightness = 10;
