@@ -42,7 +42,7 @@ namespace LumiaControl
                     }
                     else
                     {
-                        _ = framework.SendColor(scene.colorLeft, scene.brightness, scene.duration, scene.transition, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
+                        _ = framework.SendColor(scene.colorLeft, scene.brightness, 1, scene.transition, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.LEFT]);
                         _ = framework.SendColor(scene.colorRight, scene.brightness, scene.duration, scene.transition, isNewDefault, false, CommandBuilder.listOfLights[CommandBuilder.group.RIGHT]);
 
                     }

@@ -26,6 +26,7 @@ namespace LumiaControl
             LumiaSdk framework = new LumiaSdk();
             CommandBuilder builder = new CommandBuilder(framework);
             await framework.init(token, "", IP);
+            bool useSocket = false;
 
             left = new ILumiaLight
             {
@@ -42,25 +43,28 @@ namespace LumiaControl
             builder.addToLightGroup(left, CommandBuilder.group.LEFT);
 
             await debugOutput(framework);
-
-            await startServer(framework, builder, 1337).ConfigureAwait(false);
-            /*
-            while (true)
+            if (useSocket)
             {
-                Console.WriteLine("Enter string");
-                string str = System.Console.ReadLine();
-                Command cmd = builder.analyze(str);
-                if (cmd.isValid())
+                await startServer(framework, builder, 1337).ConfigureAwait(false);
+            }
+            else
+            {
+                while (true)
                 {
-                    cmd.execute();
-                }
-                CommandBuilder.LogData log = builder.getLatestLog();
-                if (log.type == CommandBuilder.LogData.Type.ERROR)
-                {
-                    Console.WriteLine(log.msg);
+                    Console.WriteLine("Enter string");
+                    string str = System.Console.ReadLine();
+                    Command cmd = builder.analyze(str);
+                    if (cmd.isValid())
+                    {
+                        cmd.execute();
+                    }
+                    CommandBuilder.LogData log = builder.getLatestLog();
+                    if (log.type == CommandBuilder.LogData.Type.ERROR)
+                    {
+                        Console.WriteLine(log.msg);
+                    }
                 }
             }
-            */
         }
 
         public static async Task startServer(LumiaSdk frameWork, CommandBuilder builder, int port)
