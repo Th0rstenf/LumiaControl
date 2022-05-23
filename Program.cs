@@ -17,7 +17,17 @@ namespace LumiaControl
         private static ILumiaLight left;
         private static ILumiaLight right;
 
+        public static IPAddress ipFromString(string str)
+        {
+            string[] fields = str.Split('.');
+            byte[] byteFields = new byte[fields.Length];
+            for (int i = 0; i < fields.Length; ++i)
+            {
+                byteFields[i] = byte.Parse(fields[i]);
+            }
 
+            return new IPAddress(byteFields);
+        }
        
 
         public static async Task MainTask()
@@ -26,7 +36,7 @@ namespace LumiaControl
             LumiaSdk framework = new LumiaSdk();
             CommandBuilder builder = new CommandBuilder(framework);
             await framework.init(token, "", IP);
-            bool useSocket = false;
+            bool useSocket = true;
 
             left = new ILumiaLight
             {
@@ -71,7 +81,15 @@ namespace LumiaControl
         {
             Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPHostEntry iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress iPAddress = iPHostEntry.AddressList[1];
+            IPAddress iPAddress = null;
+            foreach (IPAddress ip in iPHostEntry.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    iPAddress = ip;
+                    break;
+                }
+            }
             IPEndPoint localEndPoint = new IPEndPoint(iPAddress, port);
             listener.Bind(localEndPoint);
             listener.Listen(1);
